@@ -1,21 +1,27 @@
 const express = require('express');
+const routes = express.Router();
 
 const { celebrate, Segments, Joi } = require('celebrate');
 
-const Funcionario = require('./controller/Funcionario/index')
+const Funcionario = require('./controller/Funcionario/index'),
+  Token = require('./controller/Token/index')
 
-const routes = express.Router();
 
-routes.get('/', (request, response) => {
-  return response.json({
-    backend: 'Projeto Ponto Eletrônico'
-  })
-})
+routes.get('/', (request, response) => { return response.json({ backend: 'Projeto Ponto Eletrônico' }) })
 
-routes.get('/funcionario', Funcionario.index)
+/*
+FUNCIONARIO
+*/
+
+routes.get('/funcionario', Token.validate, Funcionario.index)
 routes.post('/funcionario', Funcionario.create)
-routes.put('/funcionario/:id', Funcionario.update)
-routes.delete('/funcionario/:id', Funcionario.delete)
+routes.put('/funcionario/:id', Token.validate, Funcionario.update)
+routes.delete('/funcionario/:id', Token.validate, Funcionario.delete)
 
+/*
+TOKEN
+*/
+
+routes.post('/token', Token.create)
 
 module.exports = routes;
