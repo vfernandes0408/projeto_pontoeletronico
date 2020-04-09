@@ -1,3 +1,9 @@
-const app = require('./app');
+const app = require('./app'),
+    dotenv = require("dotenv"),
+    envPath = require('../helper/env')
 
-app.listen(3000)
+let enviroment = envPath.currentEnv();
+
+dotenv.config({ path: `env/.env${enviroment}` })
+
+app.listen(process.env.PORT)
